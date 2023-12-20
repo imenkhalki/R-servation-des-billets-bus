@@ -12,62 +12,47 @@ import com.example.myapplication.databinding.ActivitySingupBinding;
 public class SingupActivity extends AppCompatActivity {
 
     ActivitySingupBinding binding;
-   DataBaseHelper dataBaseHelper;
+    DataBaseHelper dataBaseHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate( savedInstanceState );
-        binding=ActivitySingupBinding.inflate( getLayoutInflater() );
-        setContentView( binding.getRoot());
-        dataBaseHelper =new DataBaseHelper(  this );
+        binding = ActivitySingupBinding.inflate( getLayoutInflater() );
+        setContentView( binding.getRoot() );
+        dataBaseHelper = new DataBaseHelper( this );
+
         binding.signupbutton.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                 String nom=binding.nom.getText().toString();
-                 String prenom=binding.prenom.getText().toString();
-                 Integer num= binding.num.getText().length();
-                String email=binding.signupEmail.getText().toString();
-                String password=binding.signupPassword.getText().toString();
-                String ConfirmPassword=binding.signupConfirm.getText().toString();
- if (email.equals("") || password.equals("")|| ConfirmPassword.equals(""))
-     Toast.makeText( SingupActivity.this, "", Toast.LENGTH_SHORT ).show();
- else{
-     if (password.equals(ConfirmPassword)   ){
-         boolean checkUserEmail=dataBaseHelper.checkemail( email );
-         if (checkUserEmail==false){
-             boolean insert = dataBaseHelper.insertData(nom,prenom,num,email,password);
+                String nom = binding.nom.getText().toString();
+                String prenom = binding.prenom.getText().toString();
+                String num = binding.num.getText().toString();
+                String email = binding.signupEmail.getText().toString();
+                String password = binding.signupPassword.getText().toString();
+                String confirmPassword = binding.signupConfirm.getText().toString();
 
-             if (insert==true){
-                 Toast.makeText( SingupActivity.this, "signup Successfully", Toast.LENGTH_SHORT ).show();
-            Intent intent = new Intent(getApplicationContext(),loginActivity.class);
-              startActivity( intent );
-              
+                if (email.equals( "" ) || password.equals( "" ) || confirmPassword.equals( "" )) {
+                    Toast.makeText( SingupActivity.this, "Veuillez remplir tous les champs", Toast.LENGTH_SHORT ).show();
+                } else {
+                    if (password.equals( confirmPassword )) {
+                        boolean checkUserEmail = dataBaseHelper.checkemail( email );
+                        if (!checkUserEmail) {
+                            boolean insert = dataBaseHelper.insertData( nom, prenom, num, email, password );
 
-             }else{
-                 Toast.makeText( SingupActivity.this, "signup Faild", Toast.LENGTH_SHORT ).show();
-             }
-
-         }else {
-             Toast.makeText( SingupActivity.this, "User already exists , please login", Toast.LENGTH_SHORT ).show();
-         }
-     } else {
-         Toast.makeText( SingupActivity.this, "Invalid Password", Toast.LENGTH_SHORT ).show();
-     }
- }
-            }
-
-
-
-        } );
-
-        binding.signupbutton.setOnClickListener( new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(),loginActivity.class);
-                startActivity( intent );
-
-
-
+                            if (insert) {
+                                Toast.makeText( SingupActivity.this, "Inscription réussie", Toast.LENGTH_SHORT ).show();
+                                Intent intent = new Intent( getApplicationContext(), loginActivity.class );
+                                startActivity( intent );
+                            } else {
+                                Toast.makeText( SingupActivity.this, "Échec de l'inscription", Toast.LENGTH_SHORT ).show();
+                            }
+                        } else {
+                            Toast.makeText( SingupActivity.this, "L'utilisateur existe déjà, veuillez vous connecter", Toast.LENGTH_SHORT ).show();
+                        }
+                    } else {
+                        Toast.makeText( SingupActivity.this, "Les mots de passe ne correspondent pas", Toast.LENGTH_SHORT ).show();
+                    }
+                }
             }
         } );
 
